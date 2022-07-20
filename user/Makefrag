@@ -1,0 +1,26 @@
+
+
+
+OBJDIRS += user
+
+# add module file here
+USER_SRCFILES := user/main.c
+
+
+
+
+USER_SRCFILES := $(wildcard $(USER_SRCFILES))
+USER_OBJFILES := $(patsubst %.c, $(OBJDIR)/%.o, $(USER_SRCFILES))
+USER_OBJFILES := $(patsubst %.S, $(OBJDIR)/%.o, $(USER_OBJFILES))
+
+
+
+$(OBJDIR)/user/%.o: user/%.c $(OBJDIR)/.vars.KERN_CFLAGS
+	@echo + cc $<
+	@mkdir -p $(@D)
+	$(V)$(CC) -nostdinc $(KERN_CFLAGS) -c -o $@ $<
+
+$(OBJDIR)/user/%.o: user/%.S $(OBJDIR)/.vars.KERN_CFLAGS
+	@echo + as $<
+	@mkdir -p $(@D)
+	$(V)$(CC) -nostdinc $(KERN_CFLAGS) -c -o $@ $<
